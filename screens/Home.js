@@ -1,17 +1,15 @@
-import { View, SafeAreaView, Image } from 'react-native'
+import { StyleSheet, View, SafeAreaView, Image } from 'react-native'
 import tw from 'twrnc';
 import NavOptions from '../components/NavOptions';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { GOOGLE_MAPS_API_KEY } from "@env";
-import { useDispatch, useSelector } from 'react-redux';
-import { setOrigin, setDestination } from '../redux/navSlice';
+import { useDispatch } from 'react-redux';
+import { setOrigin} from '../redux/navSlice';
+import NavFavorites from '../components/NavFavorites';
 
 const Home = () => {
   const dispatch = useDispatch();
-  const origin = useSelector((state) => state.nav.origin);
-  const destination = useSelector((state) => state.nav.destination);
-
-  console.log(origin)
+  
   return (
     <SafeAreaView style={tw`bg-white h-full`}>
       <View style={tw`p-5`}>
@@ -40,7 +38,6 @@ const Home = () => {
               location: details.geometry.location,
               description: data.description,
             }));
-            dispatch(setDestination(null));
           }}
           fetchDetails={true}
           returnKeyType={"search"}
@@ -54,9 +51,16 @@ const Home = () => {
           debounce={400}
         />
         <NavOptions />
+        <NavFavorites />
       </View>
     </SafeAreaView>
   )
 }
 
 export default Home
+
+const styles = StyleSheet.create({
+  pressed: {
+    opacity: 0.6,
+  }
+})

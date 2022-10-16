@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native'
+import { View } from 'react-native'
 import tw from 'twrnc';
 import MapComponent from '../components/Map';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -36,5 +36,3 @@ const Map = () => {
 }
 
 export default Map
-
-const styles = StyleSheet.create({})

@@ -2,6 +2,8 @@ import { FlatList, Pressable, Text, View, StyleSheet, Image } from 'react-native
 import tw from 'twrnc';
 import { Icon } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector } from 'react-redux';
+import { selectOrigin } from '../redux/navSlice';
 
 const data = [
   {
@@ -20,6 +22,8 @@ const data = [
 
 const NavOptions = () => {
   const navigation = useNavigation();
+  const origin = useSelector(selectOrigin);
+
   return (
     <FlatList
       data={data}
@@ -32,8 +36,9 @@ const NavOptions = () => {
             pressed && styles.pressed
           ]}
           onPress={() => navigation.navigate(item.screen)}
+          disabled={!origin}
         >
-          <View>
+          <View style={tw`${!origin && "opacity-20"}`}>
             <Image 
               style={{width: 100, height: 100, resizeMode: 'contain', justifyContent: 'center', alignItems: 'center'}}
               source={{ uri: item.image }}

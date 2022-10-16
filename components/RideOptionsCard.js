@@ -4,6 +4,10 @@ import { Icon } from '@rneui/base';
 import { useNavigation } from '@react-navigation/native';
 import { FlatList } from 'react-native-gesture-handler';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { selectTravelTimeInformation } from '../redux/navSlice';
+import "intl";
+import "intl/locale-data/jsonp/en";
 
 const data=[
   {
@@ -26,12 +30,14 @@ const data=[
   },
 ]
 
+const SURGE_ARGE_RATE = 1.5;
+
 const RideOptionsCard = () => {
 
   const navigation = useNavigation();
   const [selected, setSelected] = useState(null);
+  const travelTravelTimeInformation = useSelector(selectTravelTimeInformation);
 
-  console.log(selected);
   return (
     <SafeAreaView style={tw`bg-white flex-grow`}>
       <View>
@@ -47,7 +53,9 @@ const RideOptionsCard = () => {
             type="fontawesome"
           />
           </Pressable>
-        <Text style={tw`text-center py-5 text-xl`}>Pick a ride: </Text>
+        <Text style={tw`text-center py-5 text-xl`}>
+          Pick a ride - {travelTravelTimeInformation?.distance?.text}
+        </Text>
       </View>
       <FlatList
         data={data}
@@ -71,17 +79,21 @@ const RideOptionsCard = () => {
             />
             <View style={tw`-ml-6`}>
               <Text style={tw`text-xl font-semibold`}>{title}</Text>
-              <Text>Travel time...</Text>
+              <Text>Travel time: {travelTravelTimeInformation?.distance?.text}</Text>
             </View>
-            <Text style={tw`text-xl`}>$99</Text>
+            <Text style={tw`text-xl`}>
+              {new Intl.NumberFormat('en-us', {
+                style: 'currency',
+                currency: 'USD',
+              }).format(
+                (travelTravelTimeInformation?.duration?.value *
+                  SURGE_ARGE_RATE * multiplier) / 100
+              )}
+            </Text>
           </Pressable>
         )}
       />
       <View style={tw`mt-auto border-t border-gray-200`}>
-        <View style={tw`flex-row justify-between items-center px-10`}>
-          <Text style={tw`text-xl`}>Total</Text>
-          <Text style={tw`text-xl`}>$99</Text>
-        </View>
         <Pressable
           style={({pressed}) =>[
             tw`bg-black py-3 m-3 rounded-full ${!selected && 'bg-gray-300'}`,
